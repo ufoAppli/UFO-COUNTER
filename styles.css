@@ -1,0 +1,227 @@
+:root {
+  color-scheme: light;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+  background: #ffffff;
+  color: #212121;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  min-height: 100vh;
+  background: #ffffff;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+#app {
+  width: 100%;
+  max-width: 520px;
+}
+
+.page {
+  display: none;
+  text-align: center;
+}
+
+.page.active {
+  display: block;
+}
+
+h1, h2 {
+  margin: 0 0 1rem;
+  font-weight: 700;
+  color: #000000;
+}
+
+h1 {
+  font-size: 2rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 0.95rem 1rem;
+  border: 1px solid #d1d1d1;
+  border-radius: 14px;
+  background: #ffffff;
+  font-size: 1rem;
+  color: #333333;
+}
+
+input[type="text"]::placeholder {
+  color: #b3b3b3;
+}
+
+.button-column {
+  display: grid;
+  gap: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+.button-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+button {
+  border: none;
+  border-radius: 18px;
+  padding: 1rem 0.75rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+button:focus-visible {
+  outline: 3px solid #6a6cff;
+  outline-offset: 2px;
+}
+
+.button-large {
+  min-height: 54px;
+}
+
+.primary-button {
+  background: rgb(119,115,253);
+}
+
+.secondary-button {
+  background: rgb(239,136,190);
+}
+
+.neutral-button {
+  background: rgb(158,158,158);
+}
+
+.accent-button {
+  background: rgb(255,253,145);
+  color: #1d1d1d;
+}
+
+.choice-button {
+  min-height: 80px;
+  font-size: 0.95rem;
+  white-space: normal;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.message {
+  position: fixed;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.85);
+  color: white;
+  padding: 0.8rem 1rem;
+  border-radius: 14px;
+  max-width: 90%;
+  z-index: 1000;
+}
+
+.summary-text {
+  text-align: left;
+  border: 1px solid #e0e0e0;
+  background: #fafafa;
+  padding: 1rem;
+  border-radius: 14px;
+  min-height: 90px;
+  white-space: pre-wrap;
+}
+
+.photo-preview {
+  margin: 1rem 0;
+  text-align: center;
+}
+
+.photo-preview-title {
+  margin-bottom: 0.5rem;
+  color: #333333;
+  font-weight: 600;
+}
+
+.photo-preview img {
+  width: 100%;
+  max-height: 260px;
+  object-fit: contain;
+  border-radius: 14px;
+  border: 1px solid #e0e0e0;
+}
+
+.data-details {
+  text-align: left;
+  max-width: 100%;
+}
+
+.detail-section {
+  margin-bottom: 1rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.detail-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.95rem 1rem;
+  background: #f7f7f7;
+  cursor: pointer;
+}
+
+.detail-summary span {
+  font-weight: 700;
+}
+
+.detail-content {
+  padding: 0.95rem 1rem;
+  display: none;
+  background: #ffffff;
+}
+
+.detail-section.open .detail-content {
+  display: block;
+}
+
+.detail-row {
+  margin: 0.35rem 0;
+  line-height: 1.45;
+}
+
+.detail-row strong {
+  color: #000000;
+}
+
+@media (max-width: 560px) {
+  .button-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 420px) {
+  button {
+    font-size: 0.95rem;
+  }
+}

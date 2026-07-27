@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>UFO COUNTER</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="stylesheet" href="styles.css">
+  <meta name="theme-color" content="#ffffff">
+</head>
+<body>
+  <div id="app">
+    <div id="message" class="message hidden"></div>
+
+    <section id="page1" class="page active">
+      <h1>UFO COUNTER</h1>
+      <div class="button-column">
+        <button class="primary-button button-large" data-action="startCount">カウント開始</button>
+        <button class="secondary-button button-large" data-action="viewData">データ閲覧</button>
+      </div>
+    </section>
+
+    <section id="page2" class="page">
+      <h2>店舗名入力</h2>
+      <div class="form-group">
+        <input id="shopNameInput" type="text" maxlength="30" placeholder="店舗名入力" autocomplete="off">
+      </div>
+      <div class="button-column">
+        <button class="secondary-button button-large" data-action="saveShop">OK</button>
+        <button class="primary-button button-large" data-action="cameraStore">カメラ起動</button>
+        <button class="neutral-button button-large" data-action="backToHome">戻る</button>
+      </div>
+    </section>
+
+    <section id="page3" class="page">
+      <h2>機種選択</h2>
+      <div class="button-grid" id="machineButtons"></div>
+      <button class="neutral-button button-large" data-action="backToShopName">戻る</button>
+    </section>
+
+    <section id="page4" class="page">
+      <h2>プライズ種類選択</h2>
+      <div class="button-grid" id="prizeTypeButtons"></div>
+      <button class="neutral-button button-large" data-action="backToMachine">戻る</button>
+    </section>
+
+    <section id="page5" class="page">
+      <h2>プライズサイズ選択</h2>
+      <div class="button-grid" id="prizeSizeButtons"></div>
+      <button class="neutral-button button-large" data-action="backToPrizeType">戻る</button>
+    </section>
+
+    <section id="page6" class="page">
+      <h2>仕掛け選択</h2>
+      <div class="button-grid" id="hookButtons"></div>
+      <button class="neutral-button button-large" data-action="backToPrizeSize">戻る</button>
+    </section>
+
+    <section id="page7" class="page">
+      <h2>入力内容確認</h2>
+      <p id="summaryText" class="summary-text"></p>
+      <div id="photoPreviewContainer" class="photo-preview hidden">
+        <div class="photo-preview-title">直前の撮影画像</div>
+        <img id="photoPreview" alt="撮影画像プレビュー">
+      </div>
+      <div class="button-column">
+        <button class="primary-button button-large" data-action="cameraMachine">カメラ起動</button>
+        <button class="secondary-button button-large" data-action="nextCount">次のカウントへ</button>
+        <button class="accent-button button-large" data-action="repeatCount">繰り返し</button>
+        <button class="neutral-button button-large" data-action="redoCount">やり直し</button>
+        <button class="neutral-button button-large" data-action="endCount">終了</button>
+        <button class="neutral-button button-large" data-action="backToHook">戻る</button>
+      </div>
+    </section>
+
+    <section id="pageA" class="page">
+      <h2>店舗データ一覧</h2>
+      <div id="shopButtons" class="button-column"></div>
+      <button class="neutral-button button-large" data-action="backToHome">戻る</button>
+    </section>
+
+    <section id="pageB" class="page">
+      <h2 id="shopDetailTitle">データ表示</h2>
+      <div id="dataDetails" class="data-details"></div>
+      <div class="button-column">
+        <button class="secondary-button button-large" data-action="backToShopList">OK</button>
+        <button class="primary-button button-large" data-action="deleteShop">データ削除</button>
+        <button class="accent-button button-large" data-action="exportCsv">CSV出力</button>
+      </div>
+    </section>
+  </div>
+
+  <input id="cameraInput" type="file" accept="image/*" capture="environment" class="hidden">
+  <script src="app.js"></script>
+</body>
+</html>
