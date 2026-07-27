@@ -3,40 +3,40 @@ const pages = ['page1', 'page2', 'page3', 'page4', 'page5', 'page6', 'page7', 'p
 const categories = {
   machine: [
     { label: '2本爪 小型', color: 'rgb(117,250,141)' },
-    { label: '2本爪 中型', color: 'rgb(161,250,79)' },
-    { label: '3本爪 超小型', color: 'rgb(194,251,186)' },
-    { label: '3本爪 小型', color: 'rgb(255,253,85)' },
-    { label: '3本爪 中型', color: 'rgb(255,254,145)' },
-    { label: '3本爪 大型', color: 'rgb(255,255,204)' },
-    { label: '特殊', color: 'rgb(119,155,253)' },
-    { label: 'その他', color: 'rgb(199,199,199)' }
+    { label: '2本爪 中型', color: 'rgb(123, 223, 29)' },
+    { label: '3本爪 超小型', color: 'rgb(35, 187, 15)' },
+    { label: '3本爪 小型', color: 'rgb(76, 154, 238)' },
+    { label: '3本爪 中型', color: 'rgb(63, 98, 238)' },
+    { label: '3本爪 大型', color: 'rgb(13, 67, 245)' },
+    { label: '特殊', color: 'rgb(212, 95, 247)' },
+    { label: 'その他', color: 'rgb(101, 91, 91)' }
   ],
   prizeType: [
     { label: 'ぬい', color: 'rgb(117,250,141)' },
-    { label: 'フィギュア(箱)', color: 'rgb(161,250,79)' },
-    { label: '食品(箱)', color: 'rgb(194,251,186)' },
-    { label: '食品(非箱)', color: 'rgb(255,253,85)' },
-    { label: '雑貨(箱)', color: 'rgb(255,254,145)' },
-    { label: '雑貨(非箱)', color: 'rgb(255,255,204)' },
-    { label: 'その他', color: 'rgb(199,199,199)' }
+    { label: 'フィギュア(箱)', color: 'rgb(123, 223, 29)' },
+    { label: '食品(箱)', color: 'rgb(35, 187, 15)' },
+    { label: '食品(非箱)', color: 'rgb(76, 154, 238)' },
+    { label: '雑貨(箱)', color: 'rgb(63, 98, 238)' },
+    { label: '雑貨(非箱)', color: 'rgb(13, 67, 245)' },
+    { label: 'その他', color: 'rgb(101, 91, 91)' }
   ],
   prizeSize: [
     { label: '小型10以下', color: 'rgb(117,250,141)' },
-    { label: '中型10～20', color: 'rgb(161,250,79)' },
-    { label: '大型20～30', color: 'rgb(194,251,186)' },
-    { label: '超大型30以上', color: 'rgb(255,253,85)' },
-    { label: 'その他', color: 'rgb(199,199,199)' }
+    { label: '中型10～20', color: 'rgb(123, 223, 29)' },
+    { label: '大型20～30', color: 'rgb(35, 187, 15)' },
+    { label: '超大型30以上', color: 'rgb(76, 154, 238)' },
+    { label: 'その他', color: 'rgb(101, 91, 91)' }
   ],
   hook: [
     { label: '橋渡し', color: 'rgb(117,250,141)' },
-    { label: '山積み/ドカ盛', color: 'rgb(161,250,79)' },
-    { label: 'スライド/ハの字', color: 'rgb(194,251,186)' },
-    { label: 'フック/S字', color: 'rgb(255,253,85)' },
-    { label: 'Cリング/Dリング', color: 'rgb(255,254,145)' },
-    { label: 'リング/ペラ輪', color: 'rgb(255,255,204)' },
+    { label: '山積み/ドカ盛', color: 'rgb(123, 223, 29)' },
+    { label: 'スライド/ハの字', color: 'rgb(35, 187, 15)' },
+    { label: 'フック/S字', color: 'rgb(76, 154, 238)' },
+    { label: 'Cリング/Dリング', color: 'rgb(63, 98, 238)' },
+    { label: 'リング/ペラ輪', color: 'rgb(13, 67, 245)' },
     { label: '鳥よけ/剣山', color: 'rgb(119,155,253)' },
     { label: '平置き', color: 'rgb(129,253,248)' },
-    { label: 'その他', color: 'rgb(199,199,199)' }
+    { label: 'その他', color: 'rgb(101, 91, 91)' }
   ]
 };
 
