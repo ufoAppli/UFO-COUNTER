@@ -87,12 +87,13 @@
       <div class="button-column">
         <button class="secondary-button button-large" data-action="backToShopList">OK</button>
         <button class="primary-button button-large" data-action="deleteShop">データ削除</button>
-        <button class="accent-button button-large" data-action="exportCsv">CSV出力</button>
+        <button class="accent-button button-large" data-action="exportCsv">写真付きZIP出力</button>
       </div>
     </section>
   </div>
 
   <input id="cameraInput" type="file" accept="image/*" capture="environment" class="hidden">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

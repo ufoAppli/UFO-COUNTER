@@ -648,14 +648,65 @@ function deleteCurrentShop() {
   showMessage('データを削除しました。');
 }
 
-function exportCurrentShopCsv() {
+function sanitizeExportFileName(value) {
+  return String(value || 'photo')
+    .replace(/[\\/:*?"<>|]/g, '')
+    .trim()
+    .slice(0, 40) || 'photo';
+}
+
+function getPhotoExtensionFromDataUrl(dataUrl) {
+  const mimeMatch = dataUrl.match(/^data:(.+);base64,/);
+  const mimeType = mimeMatch ? mimeMatch[1] : 'image/jpeg';
+  if (mimeType.includes('png')) {
+    return 'png';
+  }
+  if (mimeType.includes('webp')) {
+    return 'webp';
+  }
+  return 'jpg';
+}
+
+function buildPhotoExportEntries(shop) {
+  const entries = [];
+
+  const addPhoto = (kind, photo, index, label) => {
+    if (!photo || !photo.photo) {
+      return;
+    }
+    const extension = getPhotoExtensionFromDataUrl(photo.photo);
+    const fileName = `${sanitizeExportFileName(label)}-${kind}-${index + 1}.${extension}`;
+    entries.push({ fileName, dataUrl: photo.photo });
+  };
+
+  (shop.storePhotos || []).forEach((photo, index) => addPhoto('store', photo, index, shop.name));
+
+  shop.machines.forEach((machine, index) => {
+    if (machine.photo) {
+      const label = [machine.machineCategory, machine.prizeType, machine.prizeSize, machine.hookType].filter(Boolean).join('-') || `machine-${index + 1}`;
+      addPhoto('machine', { photo: machine.photo }, index, label);
+    }
+  });
+
+  return entries;
+}
+
+async function exportCurrentShopCsv() {
   const shop = state.shops.find((item) => item.id === state.selectedShopId);
   if (!shop) {
     return;
   }
 
+  if (typeof JSZip === 'undefined') {
+    showMessage('ZIP作成ライブラリの読み込みに失敗しました。');
+    return;
+  }
+
   const header = ['機種', 'プライズ種類', 'プライズサイズ', '仕掛け', '数', '店舗写真', '筐体写真'];
   const counts = buildShopCounts(shop).combination;
+  const photoEntries = buildPhotoExportEntries(shop);
+  const photoFileNames = photoEntries.map((entry) => entry.fileName);
+
   const rows = counts.map((item) => {
     const [machineCategory, prizeType, prizeSize, hookType] = item.key.split('-');
     const matchingMachines = shop.machines.filter((entry) => entry.machineCategory === machineCategory && entry.prizeType === prizeType && entry.prizeSize === prizeSize && entry.hookType === hookType);
@@ -668,8 +719,8 @@ function exportCurrentShopCsv() {
       prizeSize,
       hookType,
       item.value.toString(),
-      storePhotos.join(' || '),
-      machinePhotos.join(' || ')
+      storePhotos.length > 0 ? `${storePhotos.length}件` : '',
+      machinePhotos.length > 0 ? `${machinePhotos.length}件` : ''
     ];
   });
 
@@ -679,25 +730,34 @@ function exportCurrentShopCsv() {
   }).join(',')).join('\r\n');
   const bom = '\uFEFF';
   const csvData = bom + csvRows;
-  let data;
 
-  try {
-    const encoder = new TextEncoder('shift_jis');
-    data = encoder.encode(csvData);
-  } catch (error) {
-    data = new TextEncoder().encode(csvData);
+  const zip = new JSZip();
+  zip.file(`${sanitizeExportFileName(shop.name)}.csv`, csvData, { type: 'text/plain;charset=shift_jis' });
+
+  const photoBlobs = await Promise.all(photoEntries.map(async (entry) => {
+    const response = await fetch(entry.dataUrl);
+    const blob = await response.blob();
+    return { fileName: entry.fileName, blob };
+  }));
+
+  photoBlobs.forEach((photo) => {
+    zip.file(`photos/${photo.fileName}`, photo.blob, { binary: true });
+  });
+
+  if (photoFileNames.length === 0) {
+    zip.file('photos/README.txt', '写真はありません。');
   }
 
-  const blob = new Blob([data], { type: 'text/csv;charset=shift_jis;' });
-  const url = URL.createObjectURL(blob);
+  const zipBlob = await zip.generateAsync({ type: 'blob' });
+  const url = URL.createObjectURL(zipBlob);
   const anchor = document.createElement('a');
   anchor.href = url;
-  anchor.download = `${shop.name}.csv`;
+  anchor.download = `${sanitizeExportFileName(shop.name)}.zip`;
   document.body.appendChild(anchor);
   anchor.click();
   document.body.removeChild(anchor);
   URL.revokeObjectURL(url);
-  showMessage('CSVデータを出力しました。写真データはCSV内にURLとして含まれます。');
+  showMessage('写真付きZIPを出力しました。CSVと画像ファイルをまとめてダウンロードできます。');
 }
 
 function attachHandlers() {
