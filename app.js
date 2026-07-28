@@ -306,6 +306,67 @@ function renderShopDetails() {
   elements.dataDetails.appendChild(createDetailSection('プライズ', counts.prize, (key, value) => `${key}: ${value}`));
   elements.dataDetails.appendChild(createDetailSection('仕掛け', counts.hook, (key, value) => `${key}: ${value}`));
   elements.dataDetails.appendChild(createDetailSection('筐体データ', counts.combination, (key, value) => `${key}: ${value}`));
+  elements.dataDetails.appendChild(createPhotoGallery(shop));
+}
+
+function createPhotoGallery(shop) {
+  const section = document.createElement('div');
+  section.className = 'detail-section';
+
+  const header = document.createElement('div');
+  header.className = 'detail-summary';
+  header.innerHTML = '<span>写真</span><span>▼</span>';
+  section.appendChild(header);
+
+  const content = document.createElement('div');
+  content.className = 'detail-content';
+  content.style.display = 'block';
+  section.appendChild(content);
+
+  const photos = [];
+
+  if (Array.isArray(shop.storePhotos)) {
+    shop.storePhotos.forEach((photo) => {
+      photos.push({ label: photo.name || '店舗写真', src: photo.photo, type: '店舗' });
+    });
+  }
+
+  shop.machines.forEach((machine) => {
+    if (machine.photo) {
+      photos.push({ label: `${machine.machineCategory || '機種'} / ${machine.prizeType || ''}`.trim(), src: machine.photo, type: '筐体' });
+    }
+  });
+
+  if (photos.length === 0) {
+    const empty = document.createElement('div');
+    empty.className = 'detail-row';
+    empty.textContent = '写真がありません。';
+    content.appendChild(empty);
+    return section;
+  }
+
+  const list = document.createElement('div');
+  list.className = 'photo-gallery-list';
+
+  photos.forEach((photo) => {
+    const card = document.createElement('div');
+    card.className = 'photo-card';
+
+    const img = document.createElement('img');
+    img.src = photo.src;
+    img.alt = photo.label;
+
+    const caption = document.createElement('div');
+    caption.className = 'photo-card-caption';
+    caption.textContent = `${photo.type}：${photo.label}`;
+
+    card.appendChild(img);
+    card.appendChild(caption);
+    list.appendChild(card);
+  });
+
+  content.appendChild(list);
+  return section;
 }
 
 function buildShopCounts(shop) {
@@ -415,9 +476,11 @@ function handleFileSelection(event) {
   reader.onload = () => {
     const dataUrl = reader.result;
     if (state.photoTarget === 'store') {
-      ensureCurrentShop(state.shopName || elements.shopNameInput.value);
+      const shop = ensureCurrentShop(state.shopName || elements.shopNameInput.value);
+      shop.storePhotos.push({ id: generateId(), name: shop.name, photo: dataUrl, createdAt: new Date().toISOString() });
+      saveStorage();
       savePhotoViaWeb(dataUrl, 'store');
-      showMessage('店舗写真をWebで保存しました。端末のダウンロードフォルダをご確認ください。');
+      showMessage('店舗写真を保存しました。一覧画面でも確認できます。');
       showPage('page3');
       state.currentStorePhoto = dataUrl;
       return;
@@ -426,7 +489,7 @@ function handleFileSelection(event) {
       savePhotoViaWeb(dataUrl, 'machine');
       state.currentMachinePhoto = dataUrl;
       updateSummary();
-      showMessage('筐体写真をWebで保存しました。端末のダウンロードフォルダをご確認ください。');
+      showMessage('筐体写真を保存しました。一覧画面でも確認できます。');
       return;
     }
   };
@@ -455,7 +518,7 @@ function saveCurrentMachine() {
     prizeType: state.currentMachine.prizeType,
     prizeSize: state.currentMachine.prizeSize,
     hookType: state.currentMachine.hook,
-    photo: null,
+    photo: state.currentMachinePhoto || null,
     createdAt: new Date().toISOString()
   });
   saveStorage();
