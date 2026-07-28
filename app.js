@@ -378,6 +378,33 @@ function capturePhoto(target) {
   elements.cameraInput.click();
 }
 
+function buildPhotoDownloadName(target, shopName, dataUrl) {
+  const safeName = (shopName || 'photo').replace(/[\\/:*?"<>|]/g, '').slice(0, 30) || 'photo';
+  const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+  const mimeMatch = dataUrl.match(/^data:(.+);base64,/);
+  const mimeType = mimeMatch ? mimeMatch[1] : 'image/jpeg';
+  const extension = mimeType.includes('png')
+    ? 'png'
+    : mimeType.includes('webp')
+      ? 'webp'
+      : 'jpg';
+  const label = target === 'store' ? 'store' : 'machine';
+  return `${safeName}-${label}-${timestamp}.${extension}`;
+}
+
+function savePhotoViaWeb(dataUrl, target) {
+  const shopName = (state.shopName || elements.shopNameInput.value || '').trim();
+  const fileName = buildPhotoDownloadName(target, shopName, dataUrl);
+  const anchor = document.createElement('a');
+  anchor.href = dataUrl;
+  anchor.download = fileName;
+  anchor.style.display = 'none';
+  document.body.appendChild(anchor);
+  anchor.click();
+  document.body.removeChild(anchor);
+  return true;
+}
+
 function handleFileSelection(event) {
   const file = event.target.files?.[0];
   if (!file) {
@@ -388,19 +415,18 @@ function handleFileSelection(event) {
   reader.onload = () => {
     const dataUrl = reader.result;
     if (state.photoTarget === 'store') {
-      const shop = ensureCurrentShop(state.shopName || elements.shopNameInput.value);
-      const name = shop.name;
-      shop.storePhotos.push({ id: generateId(), name: name, photo: dataUrl, createdAt: new Date().toISOString() });
-      saveStorage();
-      showMessage('店舗写真を保存しました。');
+      ensureCurrentShop(state.shopName || elements.shopNameInput.value);
+      savePhotoViaWeb(dataUrl, 'store');
+      showMessage('店舗写真をWebで保存しました。端末のダウンロードフォルダをご確認ください。');
       showPage('page3');
       state.currentStorePhoto = dataUrl;
       return;
     }
     if (state.photoTarget === 'machine') {
+      savePhotoViaWeb(dataUrl, 'machine');
       state.currentMachinePhoto = dataUrl;
       updateSummary();
-      showMessage('筐体写真を保存しました。');
+      showMessage('筐体写真をWebで保存しました。端末のダウンロードフォルダをご確認ください。');
       return;
     }
   };
@@ -429,7 +455,7 @@ function saveCurrentMachine() {
     prizeType: state.currentMachine.prizeType,
     prizeSize: state.currentMachine.prizeSize,
     hookType: state.currentMachine.hook,
-    photo: state.currentMachinePhoto || null,
+    photo: null,
     createdAt: new Date().toISOString()
   });
   saveStorage();
