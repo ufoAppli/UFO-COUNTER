@@ -654,14 +654,29 @@ function exportCurrentShopCsv() {
     return;
   }
 
-  const header = ['機種', 'プライズ種類', 'プライズサイズ', '仕掛け', '数'];
+  const header = ['機種', 'プライズ種類', 'プライズサイズ', '仕掛け', '数', '店舗写真', '筐体写真'];
   const counts = buildShopCounts(shop).combination;
   const rows = counts.map((item) => {
     const [machineCategory, prizeType, prizeSize, hookType] = item.key.split('-');
-    return [machineCategory, prizeType, prizeSize, hookType, item.value.toString()];
+    const matchingMachines = shop.machines.filter((entry) => entry.machineCategory === machineCategory && entry.prizeType === prizeType && entry.prizeSize === prizeSize && entry.hookType === hookType);
+    const storePhotos = (shop.storePhotos || []).map((photo) => photo.photo || '').filter(Boolean);
+    const machinePhotos = matchingMachines.map((entry) => entry.photo || '').filter(Boolean);
+
+    return [
+      machineCategory,
+      prizeType,
+      prizeSize,
+      hookType,
+      item.value.toString(),
+      storePhotos.join(' || '),
+      machinePhotos.join(' || ')
+    ];
   });
 
-  const csvRows = [header, ...rows].map((cells) => cells.map((cell) => `"${cell.replace(/"/g, '""')}"`).join(',')).join('\r\n');
+  const csvRows = [header, ...rows].map((cells) => cells.map((cell) => {
+    const normalized = String(cell ?? '').replace(/\r?\n/g, ' ').replace(/"/g, '""');
+    return `"${normalized}"`;
+  }).join(',')).join('\r\n');
   const bom = '\uFEFF';
   const csvData = bom + csvRows;
   let data;
@@ -682,7 +697,7 @@ function exportCurrentShopCsv() {
   anchor.click();
   document.body.removeChild(anchor);
   URL.revokeObjectURL(url);
-  showMessage('CSVデータを出力しました。');
+  showMessage('CSVデータを出力しました。写真データはCSV内にURLとして含まれます。');
 }
 
 function attachHandlers() {
