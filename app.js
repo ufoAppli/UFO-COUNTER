@@ -631,7 +631,7 @@ function attachHandlers() {
 
 function registerServiceWorker() {
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js').catch(() => {
+    navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).catch(() => {
       console.warn('Service Worker の登録に失敗しました。');
     });
   }
