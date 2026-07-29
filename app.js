@@ -2,9 +2,9 @@ const STORAGE_KEY = 'ufo-counter-data';
 const pages = ['page1', 'page2', 'page3', 'page4', 'page5', 'page6', 'page7', 'pageA', 'pageB'];
 const categories = {
   machine: [
-    { label: '2本爪 小型', color: 'rgb(117,250,141)' },
-    { label: '2本爪 中型', color: 'rgb(123, 223, 29)' },
-    { label: '3本爪 超小型', color: 'rgb(35, 187, 15)' },
+    { label: '2本爪 小型', color: 'rgb(70, 185, 91)' },
+    { label: '2本爪 中型', color: 'rgb(85, 152, 22)' },
+    { label: '3本爪 超小型', color: 'rgb(21, 108, 10)' },
     { label: '3本爪 小型', color: 'rgb(76, 154, 238)' },
     { label: '3本爪 中型', color: 'rgb(63, 98, 238)' },
     { label: '3本爪 大型', color: 'rgb(13, 67, 245)' },
@@ -12,25 +12,25 @@ const categories = {
     { label: 'その他', color: 'rgb(101, 91, 91)' }
   ],
   prizeType: [
-    { label: 'ぬい', color: 'rgb(117,250,141)' },
-    { label: 'フィギュア(箱)', color: 'rgb(123, 223, 29)' },
-    { label: '食品(箱)', color: 'rgb(35, 187, 15)' },
+    { label: 'ぬい', color: 'rgb(70, 185, 91)' },
+    { label: 'フィギュア(箱)', color: 'rgb(85, 152, 22)' },
+    { label: '食品(箱)', color: 'rgb(21, 108, 10)' },
     { label: '食品(非箱)', color: 'rgb(76, 154, 238)' },
     { label: '雑貨(箱)', color: 'rgb(63, 98, 238)' },
     { label: '雑貨(非箱)', color: 'rgb(13, 67, 245)' },
     { label: 'その他', color: 'rgb(101, 91, 91)' }
   ],
   prizeSize: [
-    { label: '小型10以下', color: 'rgb(117,250,141)' },
-    { label: '中型10～20', color: 'rgb(123, 223, 29)' },
-    { label: '大型20～30', color: 'rgb(35, 187, 15)' },
+    { label: '小型10以下', color: 'rgb(70, 185, 91)' },
+    { label: '中型10～20', color: 'rgb(85, 152, 22)' },
+    { label: '大型20～30', color: 'rgb(21, 108, 10)' },
     { label: '超大型30以上', color: 'rgb(76, 154, 238)' },
     { label: 'その他', color: 'rgb(101, 91, 91)' }
   ],
   hook: [
-    { label: '橋渡し', color: 'rgb(117,250,141)' },
-    { label: '山積み/ドカ盛', color: 'rgb(123, 223, 29)' },
-    { label: 'スライド/ハの字', color: 'rgb(35, 187, 15)' },
+    { label: '橋渡し', color: 'rgb(70, 185, 91)' },
+    { label: '山積み/ドカ盛', color: 'rgb(85, 152, 22)' },
+    { label: 'スライド/ハの字', color: 'rgb(21, 108, 10)' },
     { label: 'フック/S字', color: 'rgb(76, 154, 238)' },
     { label: 'Cリング/Dリング', color: 'rgb(63, 98, 238)' },
     { label: 'リング/ペラ輪', color: 'rgb(13, 67, 245)' },
