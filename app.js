@@ -35,7 +35,7 @@ const categories = {
     { label: 'Cリング/Dリング', color: 'rgb(63, 98, 238)' },
     { label: 'リング/ペラ輪', color: 'rgb(13, 67, 245)' },
     { label: '鳥よけ/剣山', color: 'rgb(119,155,253)' },
-    { label: '平置き', color: 'rgb(129,253,248)' },
+    { label: '平置き', color: 'rgb(89, 171, 169)' },
     { label: 'その他', color: 'rgb(101, 91, 91)' }
   ]
 };
