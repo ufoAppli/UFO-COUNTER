@@ -605,7 +605,9 @@ function handleNavigation(action) {
       if (!saveCurrentMachine()) {
         return;
       }
-      showMessage('同じ条件で保存しました。');
+      state.currentMachinePhoto = null;
+      updateSummary();
+      showMessage('同じ条件で保存しました。写真は次回撮影時に設定されます。');
       break;
     case 'redoCount':
       resetCurrentMachine();
