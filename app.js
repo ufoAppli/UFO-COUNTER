@@ -55,6 +55,7 @@ const state = {
 const elements = {
   message: document.getElementById('message'),
   shopNameInput: document.getElementById('shopNameInput'),
+  shopRenameInput: document.getElementById('shopRenameInput'),
   summaryText: document.getElementById('summaryText'),
   photoPreviewContainer: document.getElementById('photoPreviewContainer'),
   photoPreview: document.getElementById('photoPreview'),
@@ -113,29 +114,29 @@ function generateId() {
   return `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 }
 
-function normalizeShopName(rawValue) {
-  let name = rawValue.trim();
+function normalizeShopName(rawValue, excludeShopId = null) {
+  let name = (rawValue || '').trim();
   if (!name) {
-    name = generateDefaultShopName();
+    name = generateDefaultShopName(excludeShopId);
   }
-  return makeUniqueShopName(name);
+  return makeUniqueShopName(name, excludeShopId);
 }
 
-function generateDefaultShopName() {
+function generateDefaultShopName(excludeShopId = null) {
   let index = 1;
-  while (state.shops.some(shop => shop.name === `店舗${index}`)) {
+  while (state.shops.some(shop => shop.id !== excludeShopId && shop.name === `店舗${index}`)) {
     index += 1;
   }
   return `店舗${index}`;
 }
 
-function makeUniqueShopName(baseName) {
-  if (!state.shops.some(shop => shop.name === baseName)) {
+function makeUniqueShopName(baseName, excludeShopId = null) {
+  if (!state.shops.some(shop => shop.id !== excludeShopId && shop.name === baseName)) {
     return baseName;
   }
 
   let index = 2;
-  while (state.shops.some(shop => shop.name === `${baseName}${index}`)) {
+  while (state.shops.some(shop => shop.id !== excludeShopId && shop.name === `${baseName}${index}`)) {
     index += 1;
   }
   return `${baseName}${index}`;
@@ -217,7 +218,10 @@ function renderChoiceButtons(container, list, key) {
     button.style.backgroundColor = item.color;
     button.dataset.choiceKey = key;
     button.dataset.choiceValue = item.label;
-    button.addEventListener('click', () => chooseCategory(key, item.label));
+    button.addEventListener('click', () => {
+      triggerVibration();
+      chooseCategory(key, item.label);
+    });
     container.appendChild(button);
   });
 }
@@ -267,6 +271,12 @@ function updateSummary() {
   }
 }
 
+function triggerVibration() {
+  if (navigator.vibrate) {
+    navigator.vibrate(20);
+  }
+}
+
 function renderShopList() {
   elements.shopButtons.innerHTML = '';
   if (state.shops.length === 0) {
@@ -284,6 +294,7 @@ function renderShopList() {
     button.className = 'primary-button button-large';
     button.textContent = shop.name;
     button.addEventListener('click', () => {
+      triggerVibration();
       state.selectedShopId = shop.id;
       showPage('pageB');
     });
@@ -298,6 +309,7 @@ function renderShopDetails() {
     return;
   }
   elements.shopDetailTitle.textContent = `データ表示：${shop.name}`;
+  elements.shopRenameInput.value = shop.name;
   elements.dataDetails.innerHTML = '';
 
   const counts = buildShopCounts(shop);
@@ -307,6 +319,24 @@ function renderShopDetails() {
   elements.dataDetails.appendChild(createDetailSection('仕掛け', counts.hook, (key, value) => `${key}: ${value}`));
   elements.dataDetails.appendChild(createDetailSection('筐体データ', counts.combination, (key, value) => `${key}: ${value}`));
   elements.dataDetails.appendChild(createPhotoGallery(shop));
+}
+
+function renameSelectedShop() {
+  const shop = state.shops.find((item) => item.id === state.selectedShopId);
+  if (!shop) {
+    showMessage('店舗を選択してください。');
+    return;
+  }
+
+  const nextName = normalizeShopName(elements.shopRenameInput.value, shop.id);
+  shop.name = nextName;
+  shop.storePhotos.forEach((photo) => {
+    photo.name = nextName;
+  });
+  saveStorage();
+  renderShopList();
+  renderShopDetails();
+  showMessage('店舗名を変更しました。');
 }
 
 function createPhotoGallery(shop) {
@@ -620,6 +650,9 @@ function handleNavigation(action) {
       resetCurrentMachine();
       showPage('page1');
       break;
+    case 'renameShop':
+      renameSelectedShop();
+      break;
     case 'backToShopList':
       state.selectedShopId = null;
       showPage('pageA');
@@ -764,7 +797,10 @@ async function exportCurrentShopCsv() {
 
 function attachHandlers() {
   document.querySelectorAll('button[data-action]').forEach((button) => {
-    button.addEventListener('click', () => handleNavigation(button.dataset.action));
+    button.addEventListener('click', () => {
+      triggerVibration();
+      handleNavigation(button.dataset.action);
+    });
   });
   elements.cameraInput.addEventListener('change', handleFileSelection);
 }

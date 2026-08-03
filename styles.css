@@ -117,6 +117,10 @@ button:focus-visible {
   color: #1d1d1d;
 }
 
+.danger-button {
+  background: rgb(220, 53, 69);
+}
+
 .choice-button {
   min-height: 80px;
   font-size: 0.95rem;

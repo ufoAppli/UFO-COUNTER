@@ -70,7 +70,7 @@
         <button class="secondary-button button-large" data-action="nextCount">次のカウントへ</button>
         <button class="accent-button button-large" data-action="repeatCount">繰り返し</button>
         <button class="neutral-button button-large" data-action="redoCount">やり直し</button>
-        <button class="neutral-button button-large" data-action="endCount">終了</button>
+        <button class="danger-button button-large" data-action="endCount">終了</button>
         <button class="neutral-button button-large" data-action="backToHook">戻る</button>
       </div>
     </section>
@@ -83,8 +83,12 @@
 
     <section id="pageB" class="page">
       <h2 id="shopDetailTitle">データ表示</h2>
+      <div class="form-group">
+        <input id="shopRenameInput" type="text" maxlength="30" placeholder="店舗名変更" autocomplete="off">
+      </div>
       <div id="dataDetails" class="data-details"></div>
       <div class="button-column">
+        <button class="secondary-button button-large" data-action="renameShop">店舗名変更</button>
         <button class="secondary-button button-large" data-action="backToShopList">OK</button>
         <button class="primary-button button-large" data-action="deleteShop">データ削除</button>
         <button class="accent-button button-large" data-action="exportCsv">写真付きZIP出力</button>
